@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indique e Ganhe - Sistema de Indicações para Cursos</title>
+    <meta name="description" content="Sistema de indicações para cursos de graduação. Indique amigos e ganhe recompensas!">
+    <meta name="author" content="Alcione João">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Analytics (adicione seu ID) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXXXX-X"></script> -->
+    <style>
+        :root {
+            --primary: #2C3E50;
+            --secondary: #1A252F;
+            --accent: #E74C3C;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #27AE60;
+            --warning: #F39C12;
+            --gray: #7F8C8D;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --education-blue: #3498DB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Todos os estilos anteriores... (mantenha todo o CSS anterior) */
+    </style>
+</head>
+<body>
+    <!-- Todo o HTML anterior permanece aqui -->
+    
+    <script>
+        // Adicione este código para rastreamento
+        document.addEventListener('DOMContentLoaded', function() {
+            // Rastrear cliques nos botões
+            const trackButtons = document.querySelectorAll('.btn, .tab-btn, .course-card button');
+            trackButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const buttonText = this.textContent.trim() || this.getAttribute('onclick') || 'botao';
+                    console.log(`Botão clicado: ${buttonText}`);
+                    // Aqui você pode enviar para Google Analytics
+                    // gtag('event', 'click', { 'event_category': 'button', 'event_label': buttonText });
+                });
+            });
+
+            // Rastrear cópia de link
+            document.getElementById('copyLink').addEventListener('click', function() {
+                console.log('Link copiado para área de transferência');
+                // gtag('event', 'copy', { 'event_category': 'referral', 'event_label': 'link_copied' });
+            });
+
+            // Salvar preferências do usuário
+            const saveUserPreferences = () => {
+                const preferences = {
+                    lastVisit: new Date().toISOString(),
+                    points: document.querySelector('.user-points').textContent,
+                    referrals: document.querySelector('.stat-card:first-child .stat-value').textContent
+                };
+                localStorage.setItem('indiqueEGanhe_preferences', JSON.stringify(preferences));
+            };
+
+            // Carregar preferências salvas
+            const loadUserPreferences = () => {
+                const saved = localStorage.getItem('indiqueEGanhe_preferences');
+                if (saved) {
+                    console.log('Preferências carregadas:', JSON.parse(saved));
+                }
+            };
+
+            loadUserPreferences();
+            window.addEventListener('beforeunload', saveUserPreferences);
+
+            // Sistema de notificações
+            const showNotification = (message, type = 'info') => {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 15px 25px;
+                    background: ${type === 'success' ? '#27AE60' : type === 'error' ? '#E74C3C' : '#3498DB'};
+                    color: white;
+                    border-radius: 5px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 1000;
+                    animation: slideIn 0.3s ease;
+                `;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            };
+
+            // Adicionar animações CSS
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
